@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -13,6 +14,7 @@ public class Produit {
 	private int id;
 	private String nom;
 	@ManyToOne
+	@JoinColumn(name = "categorie_id")
 	private Categorie categorie;
 	
 	public int getId() {
