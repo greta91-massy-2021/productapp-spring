@@ -60,7 +60,15 @@ INSERT INTO `produit` (`id`, `nom`, `categorie_id`) VALUES
 (1, 'produit 1', 1),
 (2, 'produit 1', 1),
 (3, 'produit 3', 3),
-(4, 'produit 4', 1);
+(4, 'produit 4', 1),
+(5, 'produit 1', 1),
+(6, 'produit 1', 1),
+(7, 'produit 3', 3),
+(8, 'produit 4', 1),
+(9, 'produit 1', 1),
+(10, 'produit 1', 1),
+(11, 'produit 3', 3),
+(12, 'produit 4', 1);
 
 --
 -- Index pour les tables exportées

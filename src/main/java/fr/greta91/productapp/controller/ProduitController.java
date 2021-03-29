@@ -1,25 +1,26 @@
 package fr.greta91.productapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.greta91.productapp.model.Produit;
 import fr.greta91.productapp.repos.ProduitRepository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 
@@ -30,14 +31,22 @@ public class ProduitController {
 	@Autowired
 	ProduitRepository produitRepo;
 	@GetMapping("")
-	public List<Produit> getProduits(){
-		List<Produit> list = produitRepo.findAll();
+	public List<Produit> getProduits(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") int pageNumber, @RequestParam(value = "perPage", required = false, defaultValue = "10") int perPage){
+		Pageable page = PageRequest.of(pageNumber, perPage);
+		Page<Produit> pageProduit = produitRepo.findAll(page);
 //		List<String> list = new ArrayList<String>();
 //		list.add("Produit 1");
 //		list.add("Produit 2");
 //		list.add("Produit 3");
 //		list.add("Produit 4");
-		return list;
+		return pageProduit.getContent();
+	}
+	
+	@GetMapping("/count")
+	public HashMap<String, Integer> getProduitsCount() {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("produitsCount", produitRepo.getProduitsCount());
+		return map;
 	}
 
 	@GetMapping("/{id}")
@@ -51,7 +60,7 @@ public class ProduitController {
 		}
 	}
 	
-	@PutMapping("/create}")
+	@PostMapping("/create")
 	public ResponseEntity<Produit> createProduit(@RequestBody Produit produit) {
 		try {
 			Produit newProduit = produitRepo.save(produit);
