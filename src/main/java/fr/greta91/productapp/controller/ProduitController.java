@@ -26,30 +26,46 @@ import java.util.Optional;
 
 @CrossOrigin(maxAge = 3600, origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/produits")
+@RequestMapping("/api")
 public class ProduitController {
 	@Autowired
 	ProduitRepository produitRepo;
-	@GetMapping("")
-	public List<Produit> getProduits(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") int pageNumber, @RequestParam(value = "perPage", required = false, defaultValue = "10") int perPage){
+	@GetMapping("/public/produits")
+	public List<Produit> getProduits(@RequestParam(value = "pageNumber", required = false, defaultValue = "0") int pageNumber, 
+											@RequestParam(value = "perPage", required = false, defaultValue = "10") int perPage, 
+											@RequestParam(value = "searchWord", required = false, defaultValue = "") String searchWord
+											){
 		Pageable page = PageRequest.of(pageNumber, perPage);
-		Page<Produit> pageProduit = produitRepo.findAll(page);
+		List<Produit> list = null;
+		if (searchWord.length() > 0) {
+			list = produitRepo.findAllByNomContainingIgnoreCase(searchWord, page);
+		}
+		else {
+			Page<Produit> pageProduit = produitRepo.findAll(page);
+			list = pageProduit.getContent();
+		}
 //		List<String> list = new ArrayList<String>();
 //		list.add("Produit 1");
 //		list.add("Produit 2");
 //		list.add("Produit 3");
 //		list.add("Produit 4");
-		return pageProduit.getContent();
+		return list;
 	}
 	
 	@GetMapping("/count")
-	public HashMap<String, Integer> getProduitsCount() {
+	public HashMap<String, Integer> getProduitsCount(@RequestParam(value = "searchWord", required = false, defaultValue = "") String searchWord
+			) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
-		map.put("produitsCount", produitRepo.getProduitsCount());
+		if (searchWord.length() > 0) {
+			map.put("produitsCount", produitRepo.getProduitsCountByNom(searchWord));
+		} else {
+			map.put("produitsCount", produitRepo.getProduitsCount());
+		}
+		
 		return map;
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/public/produits/{id}")
 	public ResponseEntity<Produit> getProduit(@PathVariable int id) {
 		Optional<Produit> optional = produitRepo.findById(id);
 		if(optional.isPresent()) {
@@ -60,7 +76,7 @@ public class ProduitController {
 		}
 	}
 	
-	@PostMapping("/create")
+	@PostMapping("/employe/produits/create")
 	public ResponseEntity<Produit> createProduit(@RequestBody Produit produit) {
 		try {
 			Produit newProduit = produitRepo.save(produit);
