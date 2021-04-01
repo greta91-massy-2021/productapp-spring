@@ -52,7 +52,7 @@ public class ProduitController {
 		return list;
 	}
 	
-	@GetMapping("/count")
+	@GetMapping("/public/count")
 	public HashMap<String, Integer> getProduitsCount(@RequestParam(value = "searchWord", required = false, defaultValue = "") String searchWord
 			) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
