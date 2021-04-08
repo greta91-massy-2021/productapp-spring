@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@CrossOrigin(maxAge = 3600, origins = "http://localhost:3000")
+@CrossOrigin(maxAge = 3600, origins = "*")
 @RestController
 @RequestMapping("/api")
 public class ProduitController {
@@ -86,7 +86,7 @@ public class ProduitController {
 		}
 	}
 	
-	@PutMapping("/edit")
+	@PutMapping("/employe/produits/edit")
 	public ResponseEntity<Produit> editProduit(@RequestBody Produit produit) {
 		try {
 			Produit newProduit = produitRepo.save(produit);
@@ -96,7 +96,7 @@ public class ProduitController {
 		}
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/employe/produits/delete/{id}")
 	public ResponseEntity<String> DeleteProduit(@PathVariable("id") int produitId) {
 		try {
 			produitRepo.deleteById(produitId);

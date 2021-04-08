@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@CrossOrigin(maxAge = 3600, origins = "http://localhost:3000")
+@CrossOrigin(maxAge = 3600, origins = "*")
 @RestController
 @RequestMapping("/categories")
 public class CategorieController {

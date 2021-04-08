@@ -13,6 +13,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>productapp</name>
 	<description>backend de l&apos;appli React</description>
+	<!-- par défaut, on génére l'application standalone avec spring boot donc un jar. Pour pouvoir déployer notre appli dans un serveur Tomcat on ajoute 
+        va générer un war -->
+	<packaging>war</packaging>
 	<properties>
 		<java.version>8</java.version>
 	</properties>
@@ -72,6 +75,13 @@
         	<groupId>org.springframework.boot</groupId>
         	<artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+        <!-- par défaut, on génére l'application standalone avec spring boot. Pour pouvoir déployer notre appli dans un serveur Tomcat on ajoute 
+        la dependence suivante -->
+        <dependency>
+		   <groupId>org.springframework.boot</groupId>
+		   <artifactId>spring-boot-starter-tomcat</artifactId>
+		   <scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -81,6 +91,14 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<!-- par défaut, le nom de war est égal à ${artifactId} + ${version}, ici on veut avoir uniquement ${artifactId}-->
+		<finalName>${artifactId}</finalName>
 	</build>
 
 </project>
+
+
+
+
+
+
